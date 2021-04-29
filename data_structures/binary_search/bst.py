@@ -220,8 +220,5 @@ if __name__ == '__main__':
     print("In order traversal after node deletion")
     root.in_order_traversal()
 
-    #root.delete_node(1)
-    #root.delete_node(8)
-    #root.delete_node(4)
     root.remove_node(8)
     root.in_order_traversal()
