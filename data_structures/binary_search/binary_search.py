@@ -29,4 +29,4 @@ if __name__ == '__main__':
     binary_search_1(a, target)
     index = binary_search_2(a, 0, len(a)-1, target)
     if (index != -1):
-         print("Element %d found", a[index])
+         print("Found element %d " % a[index])
