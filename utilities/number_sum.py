@@ -41,6 +41,7 @@ def fourNumberSum(array, targetSum):
 	while left < right :
 		inner_left = left + 1
 		inner_right = right - 1
+		temp_sum = array[left] + array[inner_left] + array[inner_right] + array[right]
 		partial_sum = targetSum - (array[left] + array[right])
 		while inner_left < inner_right :
 			current_sum = array[inner_left] + array[inner_right]
@@ -52,7 +53,10 @@ def fourNumberSum(array, targetSum):
 				inner_left += 1
 			else:
 				inner_right -= 1
-		if (array[left+1] + array[right-1]) < partial_sum:
+		if temp_sum == targetSum:
+			left += 1
+			right -= 1
+		elif temp_sum < targetSum:
 			left += 1
 		else:
 			right -= 1
@@ -66,8 +70,23 @@ if __name__ == '__main__':
 	
 	array = [7, 6, 4, -1, 1, 2]
 	target = 16
-	print(fourNumberSum(array, target))
+	#print(fourNumberSum(array, target))
 
 	array = [1, 2, 3, 4, 5, 6, 7]
 	target = 10
+	#print(fourNumberSum(array, target))
+
+	array = [-1, 22, 18, 4, 7, 11, 2, -5, -3]
+	target = 30
 	print(fourNumberSum(array, target))
+
+	#Expected o/p
+	"""
+	[-1, 22, 7, 2],
+  	[22, 4, 7, -3],
+  	[-1, 18, 11, 2],
+  	[18, 4, 11, -3],
+  	[22, 11, 2, -5]
+	"""
+
+
