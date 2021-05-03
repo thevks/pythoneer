@@ -38,6 +38,24 @@ class BST:
             self.right.pre_order_traversal()
         print(self.data)
     
+    def print_paths_and_branch_sum(self, stack):
+         
+        if self is None :
+            return
+        
+        stack.append(self.data)
+        
+        if self.left is None and self.right is None :
+            print("Sum of path ", stack, "--> ", sum(stack))
+                    
+        if self.left is not None:
+            self.left.print_paths_and_branch_sum(stack)
+        
+        if self.right is not None:
+            self.right.print_paths_and_branch_sum(stack)
+        
+        stack.pop()
+    
     def contains(self, value):           
         if value < self.data:
             if self.left:
@@ -182,6 +200,8 @@ class BST:
                 parent.right = self.right if self.right is not None else self.left
         return self
     
+      
+    
 if __name__ == '__main__':
     root = BST(3)
     root.add_node(1)
@@ -215,10 +235,14 @@ if __name__ == '__main__':
         print("Node 5 not found")
 
     print("Going to delete node 5")
-    root.delete_node(5)
+    #root.delete_node(5)
 
     print("In order traversal after node deletion")
-    root.in_order_traversal()
+    #root.in_order_traversal()
 
-    root.remove_node(8)
-    root.in_order_traversal()
+    #root.remove_node(8)
+    #root.in_order_traversal()
+
+    print("Print Paths")
+    root.print_paths_and_branch_sum([])
+    
