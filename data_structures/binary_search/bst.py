@@ -17,12 +17,27 @@ class BST:
                 self.right = BST(data)
         #return self
     
+    def find_kth_smallest(self, k):
+        sorted_array = []
+        _in_order_traversal(self, sorted_array)
+        return sorted_array[k-1]
+
+    def find_kth_largest(self, k):
+        sorted_array = []
+        _in_order_traversal(self, sorted_array)
+        return sorted_array[len(sorted_array) - k]
+
     def in_order_traversal(self):
-        if self.left:
-            self.left.in_order_traversal()  
+        sorted_array = []
+        self._in_order_traversal(sorted_array)
+
+    def _in_order_traversal(self, sorted_array):
+        if self is None:
+            return
+        self.left._in_order_traversal(sorted_array)  
         print(self.data)
-        if self.right:
-            self.right.in_order_traversal()
+        sorted_array.append(self.data)
+        self.right._in_order_traversal(sorted_array)
     
     def pre_order_traversal(self):
         print(self.data)
@@ -38,24 +53,7 @@ class BST:
             self.right.pre_order_traversal()
         print(self.data)
     
-    def print_paths_and_branch_sum(self, stack):
-         
-        if self is None :
-            return
-        
-        stack.append(self.data)
-        
-        if self.left is None and self.right is None :
-            print("Sum of path ", stack, "--> ", sum(stack))
-                    
-        if self.left is not None:
-            self.left.print_paths_and_branch_sum(stack)
-        
-        if self.right is not None:
-            self.right.print_paths_and_branch_sum(stack)
-        
-        stack.pop()
-    
+ 
     def contains(self, value):           
         if value < self.data:
             if self.left:
@@ -199,9 +197,82 @@ class BST:
             elif parent.right == self:
                 parent.right = self.right if self.right is not None else self.left
         return self
+
+def print_paths_and_branch_sum(node, stack, paths):
+         
+    if node is None :
+        return
+        
+    stack.append(node.data)
+        
+    if node.left is None and node.right is None :
+        print("Sum of path ", stack, "--> ", sum(stack))
+        paths.append(stack)
+        return
+                    
+    print_paths_and_branch_sum(node.left, stack, paths)            
+    print_paths_and_branch_sum(node.right, stack, paths)
+
+    stack.pop()
+
+def branchSums(node, runninSum, sums) :
+    if node is None :
+        return
     
-      
+    newRunningSum = runninSum + node.data
     
+    if node.left is None and node.right is None:
+        sums.append(newRunningSum)
+        return
+    
+    branchSums(node.left, newRunningSum, sums)
+    branchSums(node.right, newRunningSum, sums)
+
+
+def depths_sum(node, depth) :
+    if node is None :
+        return 0
+    
+    return (depth + depths_sum(node.left, depth+1) + 
+                    depths_sum(node.right, depth+1))
+
+def depths_sum_v2(root):
+    sum = 0
+    stack = [{"node":root, "depth": 0}]
+
+    while stack:
+        node_info = stack.pop()
+        node, depth = node_info["node"], node_info["depth"]
+        if node is None:
+            continue
+        sum += depth
+        stack.append({"node" : node.left, "depth" : depth + 1})
+        stack.append({"node" : node.right, "depth" : depth + 1})
+    
+    return sum
+
+def nodes_count(node) :
+    if node is None :
+        return 0
+    elif node.left is None and node.right is None :
+        return 1
+    else :
+        return 1 + nodes_count(node.left) + nodes_count(node.right)
+
+def _is_bst_valid(node, min_value, max_value):
+    if node is None:
+        return True
+    
+    if (node.data < min_value or node.data > max_value) :
+        return False
+    
+    return (_is_bst_valid(node.left, min_value, node.data) and
+           _is_bst_valid(node.right, node.data, max_value)) 
+
+def is_bst_valid(root) :
+    return _is_bst_valid(root, float("-inf"), float("inf"))
+
+   
 if __name__ == '__main__':
     root = BST(3)
     root.add_node(1)
@@ -243,6 +314,25 @@ if __name__ == '__main__':
     #root.remove_node(8)
     #root.in_order_traversal()
 
-    print("Print Paths")
-    root.print_paths_and_branch_sum([])
+    print("Print Paths")    
+    paths = []
+    print_paths_and_branch_sum(root, [], paths)
+    print(paths)
+
+    #sums = []
+    #branchSums(root, 0, sums)
+    #print(sums)
+
+    print("Nodes Count : ")
+    print(nodes_count(root))
+
+    print("Depth Sums : ")
+    print(depths_sum(root, 0))
     
+    print("Depth Sums V2 : ")
+    print(depths_sum_v2(root))
+
+    print(is_bst_valid(root))
+
+    print("2nd Largest: ", root.find_kth_largest(2))
+    print("2nd smallest: ", root.find_kth_smallest(2))
