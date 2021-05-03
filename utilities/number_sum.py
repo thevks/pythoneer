@@ -33,7 +33,7 @@ def threeNumberSum(array, targetSum):
 				right -= 1
 	return list
 
-def fourNumberSum_without_ordering(array, targetSum):
+def fourNumberSum_v1(array, targetSum):
 	array.sort()
 	list = []
 	n = len(array)
@@ -53,67 +53,42 @@ def fourNumberSum_without_ordering(array, targetSum):
 					r -= 1
 	return list
 
-def fourNumberSum_without_duplicate(arr, X):
-	list = [] 
-	N = len(array)
-	Map = {}
-	for i in range(N-1):
-		for j in range(i+1, N):
-			Map[array[i] + array[j]] = [i, j]
-	
-	temp = [0 for i in range(N)]
 
-    # Iterate from 0 to length of arr
-	for i in range(N - 1):
-    
-        # Iterate from i + 1 to length of arr
-		for j in range(i + 1, N):
-             
-            # Store curr_sum = arr[i] + arr[j]
-			curr_sum = arr[i] + arr[j]
- 
-            # Check if X - curr_sum if present
-            # in map
-			if (X - curr_sum) in Map:
-                 
-                # Store pair having map value
-                # X - curr_sum
-				p = Map[X - curr_sum]
- 
-				if (p[0] != i and p[1] != i and
-					p[0] != j and p[1] != j and
-					temp[p[0]] == 0 and temp[p[1]] == 0 and
-					temp[i] == 0 and temp[j] == 0):
-                         
-                    # Print the output
-					print(arr[i], ",", arr[j], ",", arr[p[0]], ",", arr[p[1]], sep = "")
-					list.append([arr[i], arr[j], arr[p[0]], arr[p[1]]])
-					
-					temp[p[0]] = 1          
-					temp[p[1]] = 1
-					temp[i] = 1
-					temp[j] = 1
-	return list
+def fourNumberSum_v2(array, targetSum):
+    seen = {}
+    result = [] # quadruplets
+
+    # get Q(current pair of numbers) and check if P we have seen P
+    for i in range(1, len(array) - 1):
+        for j in range(i+1, len(array)):
+            currentSum = array[i] + array[j]
+            difference = targetSum - currentSum
+
+            if difference in seen:
+                for pair in seen[difference]:
+                    result.append(pair + [array[i], array[j]])
+        
+        # Add P(pair of numbers previously seen)
+        for k in range(i):
+            currentSum = array[k] + array[i]
+            if currentSum not in seen:
+                seen[currentSum] = []
+            seen[currentSum].append([array[k], array[i]])
+        
+    return result
                 
 
 if __name__ == '__main__':
-	#array = [-8, -6, 1, 2, -3, 4, -5, 6, 8, 3, 5]
-	#target = 0
-	#print(twoNumberSum(array, target))
-	#print(threeNumberSum(array, target))
 	
-	array = [7, 6, 4, -1, 1, 2]
-	target = 16
-	#print(fourNumberSum(array, target))
-
-	array = [1, 2, 3, 4, 5, 6, 7]
-	target = 10
-	#print(fourNumberSum(array, target))
+	array = [-8, -6, 1, 2, -3, 4, -5, 6, 8, 3, 5]
+	target = 0
+	print(twoNumberSum(array, target))
+	print(threeNumberSum(array, target))
 
 	array = [-1, 22, 18, 4, 7, 11, 2, -5, -3]
 	target = 30
-	print(fourNumberSum_without_ordering(array, target))
-	print(fourNumberSum_without_duplicate(array, target))
+	print(fourNumberSum_v1(array, target))
+	print(fourNumberSum_v2(array, target))
 
 	#Expected o/p
 	"""
@@ -123,5 +98,3 @@ if __name__ == '__main__':
   	[18, 4, 11, -3],
   	[22, 11, 2, -5]
 	"""
-
-
