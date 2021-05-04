@@ -272,7 +272,23 @@ def _is_bst_valid(node, min_value, max_value):
 def is_bst_valid(root) :
     return _is_bst_valid(root, float("-inf"), float("inf"))
 
-   
+def copy_tree(root):
+    if root is None:
+        return
+    new_root = BST(root.data)
+    new_root.left = copy_tree(root.left)
+    new_root.right = copy_tree(root.right)
+    
+    return new_root
+
+def mirror_tree(root):
+    if root is None:
+        return
+    root.left, root.right = root.right, root.left
+    mirror_tree(root.left)
+    mirror_tree(root.right)
+
+  
 if __name__ == '__main__':
     root = BST(3)
     root.add_node(1)
@@ -336,3 +352,11 @@ if __name__ == '__main__':
 
     #print("2nd Largest: ", root.find_kth_largest(2))
     #print("2nd smallest: ", root.find_kth_smallest(2))
+
+    mirror_tree(root)
+    print("Mirror Copy: ")
+    root.pre_order_traversal()
+
+    new_root = copy_tree(root)
+    print("Copy of Tree: ")
+    new_root.pre_order_traversal()
