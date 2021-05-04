@@ -288,6 +288,28 @@ def mirror_tree(root):
     mirror_tree(root.left)
     mirror_tree(root.right)
 
+def height(node):
+    if node is None :
+        return 0
+    left_height = height(node.left)
+    right_height = height(node.right)
+    return 1 + max(left_height, right_height)
+
+def diameter(node):
+    if node is None :
+        return 0
+    
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    left_diameter = diameter(node.left)
+    right_diameter = diameter(node.right)
+ 
+    return max(left_height + right_height + 1, max(left_diameter, right_diameter))
+
+def leaf_to_leaf_paths(node):
+    pass
+
   
 if __name__ == '__main__':
     root = BST(3)
@@ -360,3 +382,6 @@ if __name__ == '__main__':
     new_root = copy_tree(root)
     print("Copy of Tree: ")
     new_root.pre_order_traversal()
+
+    print("Diameter of tree : ")
+    print(diameter(new_root))
