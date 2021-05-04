@@ -295,17 +295,92 @@ def height(node):
     right_height = height(node.right)
     return 1 + max(left_height, right_height)
 
+"""
+left_height + right_height +1 is the diameter through the tree's root
+max(left_diameter, right_diameter) is the max of each side's diameter, 
+i.e. when the longest path does not pass through the binary tree's root.
+    
+The diameter can occur through:
+    1) The binary tree's root, meaning that its longest path is from the 
+    left subtree through the root and down into the right subtree.
+    2) The left or right subtree without passing through the binary tree's root.
+"""
 def diameter(node):
     if node is None :
         return 0
     
     left_height = height(node.left)
     right_height = height(node.right)
-
+    
     left_diameter = diameter(node.left)
     right_diameter = diameter(node.right)
  
     return max(left_height + right_height + 1, max(left_diameter, right_diameter))
+
+def is_bst_height_balanced(node) :
+    if node is None:
+        return True
+    
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    if abs(left_height - right_height) > 1 :
+        return False
+    
+    return is_bst_height_balanced(node.left) and is_bst_height_balanced (node.right)
+
+def is_balanced(node) :
+    if node is None:
+        return True
+    
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    if (abs(left_height - right_height) <= 1 and
+        is_balanced(node.left) is True and
+        is_balanced(node.right) is True) :
+        return True
+    
+    return False
+
+def find_path(root, value, path) :
+    """
+    Function to find path from root to node
+    """
+    if root is None :
+        return False
+
+    path.append(root.data)
+
+    if (root.data == value) :
+        return True
+    
+    if ((find_path(root.left, value, path)) or                                                   
+        (find_path(root.right, value, path))) :
+        return True
+    
+    path.pop()
+    return False
+
+def find_common_ancestor(root, n1, n2) : 
+    path1 = []
+    path2 = []
+
+    if (not find_path(root, n1, path1) or
+        not find_path(root, n2, path2)) :
+        return -1
+    
+    i = 0
+    while (i < len(path1) and i < len(path2)):
+        if path1[i] != path2[i]:
+            break
+        i += 1
+    
+    print("Common ancestor of {} & {} is {}".format(n1, n2, path1[i-1]))
+    return path1[i-1]
+    
+
+
 
 def leaf_to_leaf_paths(node):
     pass
@@ -385,3 +460,21 @@ if __name__ == '__main__':
 
     print("Diameter of tree : ")
     print(diameter(new_root))
+
+    print(is_bst_height_balanced(new_root))
+    print(is_balanced(new_root))
+
+    path = []
+    if find_path(new_root, 7, path) is True :
+        print("Path is found: ")
+    else:
+        print("Path is not found: ")
+    
+    print(path)
+
+    
+    find_common_ancestor(new_root, 1, 8)
+    find_common_ancestor(new_root, 1, 5)
+    find_common_ancestor(new_root, 3, 4)
+    find_common_ancestor(new_root, 8, 9)
+    find_common_ancestor(new_root, 3, 8)
