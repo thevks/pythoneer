@@ -283,10 +283,10 @@ if __name__ == '__main__':
 
     print("Pre Order Traversal")
     root.pre_order_traversal()
-    print("In Order Traversal")
-    root.in_order_traversal()
-    print("Post Order Traversal")
-    root.post_order_traversal()
+    #print("In Order Traversal")
+    #root.in_order_traversal()
+    #print("Post Order Traversal")
+    #root.post_order_traversal()
 
     print("Sum of nodes ", root.sum_of_all_nodes())
 
@@ -334,5 +334,5 @@ if __name__ == '__main__':
 
     print(is_bst_valid(root))
 
-    print("2nd Largest: ", root.find_kth_largest(2))
-    print("2nd smallest: ", root.find_kth_smallest(2))
+    #print("2nd Largest: ", root.find_kth_largest(2))
+    #print("2nd smallest: ", root.find_kth_smallest(2))
